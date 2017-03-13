@@ -1,65 +1,114 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>Only js</title>
 </head>
 
 <body>
+<form method="post">
+	<fieldset>
+		<label for="toggle"><input type="checkbox" class="toggle" value="toggle" id="toggle"><img src="checkbox.png"
+																								  style="width: 20px;">All/None</label>
+		<br>
+	</fieldset>
+</form>
 
 
-<script type="text/javascript" src="js/local.js"></script>
-<label for="toggle">
-	<input id="toggle" name="toggle" type="checkbox" onclick="toggle(this)">All/None
-</label><br>
 <script>
-	var mainArr = ['cat', 'dog', 'fish'];
+	var animals = ['cat', 'dog', 'fish'];
 
-	mainArr.forEach(function(el){
-
-		createCheckbox(el)
+	animals.forEach(function (el) {
+		createBlock(el)
 	});
 
-	function createCheckbox(name){
+	var checkboxes = document.getElementsByTagName("input");
+	for (var i = 0; i < checkboxes.length; i++) {
+		var el = checkboxes[i];
+		el.onclick = function () {
+			clickCheckbox(this);
+		};
+	}
+
+	function createBlock(name) {
 
 		var checkbox = document.createElement('input');
 		checkbox.type = "checkbox";
-		checkbox.name = name;
+		checkbox.name = 'animal';
 		checkbox.value = name;
 		checkbox.id = name;
 
 		var label = document.createElement('label');
 		label.htmlFor = name;
-		label.appendChild(document.createTextNode(name));
+		label.appendChild(document.createTextNode(capitalizeFirstLetter(name)));
+
+		var img = document.createElement('img');
+		img.src = 'checkbox.png';
+		img.style.width = "20px";
 
 		var br = document.createElement("br");
 
-
-		document.body.appendChild(checkbox);
-		document.body.appendChild(label);
-		document.body.appendChild(br);
+		document.getElementsByTagName("fieldset")[0].appendChild(label);
+		label.insertBefore(img, label.firstChild);
+		label.insertBefore(checkbox, label.firstChild);
+		document.getElementsByTagName("fieldset")[0].appendChild(br);
 
 	}
-	function toggle(that){
+
+	function clickCheckbox(that) {
+
 		var count = 0;
-		mainArr.forEach(function(el){
-			count += (document.getElementById(el).checked) ? 1 : 0;
+		var elements = document.getElementsByName("animal");
+		var elToggle = document.getElementById("toggle");
+
+		elements.forEach(function (el) {
+			count += (el.checked) ? 1 : 0;
 		});
 
-		if(count > 0){
-			mainArr.forEach(function(el){
-				document.getElementById(el).checked = false;
-				that.checked = false;
-			});
-		} else {
-			mainArr.forEach(function(el){
-				document.getElementById(el).checked = true;
-				that.checked = true;
-			});
+		elToggle.checked = (count == elements.length);
+
+		if (that.classList.contains("toggle")) {
+			if (count > 0) {
+				elToggle.checked = false;
+				document.getElementsByName("animal").forEach(function (el) {
+					el.checked = false;
+				});
+			} else {
+				document.getElementsByName("animal").forEach(function (el) {
+					el.checked = true;
+				});
+				elToggle.checked = true;
+
+			}
 		}
+
+
 	}
+
+	function capitalizeFirstLetter(str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+
+
 </script>
+<style>
+	img {
+		filter: gray;
+		-webkit-filter: grayscale(1);
+		filter: grayscale(1);
+	}
+
+	input[type=checkbox] {
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	input:checked + img {
+		-webkit-filter: grayscale(0);
+		filter: none;
+	}
+</style>
 </body>
 
 </html>
