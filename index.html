@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Only js</title>
+</head>
+
+<body>
+
+
+<script type="text/javascript" src="js/local.js"></script>
+<label for="toggle">
+	<input id="toggle" name="toggle" type="checkbox" onclick="toggle(this)">All/None
+</label><br>
+<script>
+	var mainArr = ['cat', 'dog', 'fish'];
+
+	mainArr.forEach(function(el){
+
+		createCheckbox(el)
+	});
+
+	function createCheckbox(name){
+
+		var checkbox = document.createElement('input');
+		checkbox.type = "checkbox";
+		checkbox.name = name;
+		checkbox.value = name;
+		checkbox.id = name;
+
+		var label = document.createElement('label');
+		label.htmlFor = name;
+		label.appendChild(document.createTextNode(name));
+
+		var br = document.createElement("br");
+
+
+		document.body.appendChild(checkbox);
+		document.body.appendChild(label);
+		document.body.appendChild(br);
+
+	}
+	function toggle(that){
+		var count = 0;
+		mainArr.forEach(function(el){
+			count += (document.getElementById(el).checked) ? 1 : 0;
+		});
+
+		if(count > 0){
+			mainArr.forEach(function(el){
+				document.getElementById(el).checked = false;
+				that.checked = false;
+			});
+		} else {
+			mainArr.forEach(function(el){
+				document.getElementById(el).checked = true;
+			});
+		}
+	}
+</script>
+</body>
+
+</html>
